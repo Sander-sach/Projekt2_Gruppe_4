@@ -1,23 +1,56 @@
 public class Medlem {
+    //personoplysninger/Medlemstype
     String navn;
-    String adresse;
-    String alder;
+    int alder;
+    String aktivitetstype;
+    boolean kokurrence;
 
-    Medlem(String na, String ad, String al){
-        this.navn=na;
-        this.adresse=ad;
-        this.alder=al;
+    Medlem(String navn, int alder, String aktivitetstype, boolean kokurrence) {
+        this.navn = navn;
+        this.alder = alder;
+        this.aktivitetstype = aktivitetstype;
+        this.kokurrence = kokurrence;
     }
-    @Override
+
+    //return
+    String getNavn() {
+        return navn;
+    }
+
+    int getAlder() {
+        return alder;
+    }
+
+    String getAktivitetstype() {
+        return aktivitetstype;
+    }
+
+    boolean Kokurrence() {
+        return kokurrence;
+    }
+    //toString metode til udprintning af medlems liste
     public String toString(){
-        return "\n"+navn+"\n"+adresse+"\n"+alder;
+        return navn +","+ alder +","+ aktivitetstype +","+ (kokurrence ? "Konkurrence" : "Motionist");
     }
-
-    public static void main(String[]arg){
-            Medlem m1=new Medlem("kasper","allegade45","67");
-        Medlem m2=new Medlem("kasper","allegade45","67");
-        Medlem m3=new Medlem("peter","allegade56","67");
-            if((m2.toString().equals(m1.toString())))System.out.println("samme");else{System.out.println("wrong");}
+    // ToString metode til at gemme medlemmers Booleans som True eller False i .txt dokumenter
+    public String saveMedlem(){
+        return navn +","+ alder +","+ aktivitetstype +","+ kokurrence;
+    }
+}
+//Under klasse
+class svømmeMedlem extends Medlem{
+    public svømmeMedlem(String navn, int alder, boolean konkurrence){
+        super(navn,alder,"svømning",konkurrence);
 
     }
 }
+//main der printer ud for at prøve at se hvordan det ville se ud
+class main{
+    public static void main(String[] args){
+
+        svømmeMedlem medlem1=new svømmeMedlem("Anna Hansen", 25, true);
+
+        System.out.println(medlem1);
+    }
+}
+

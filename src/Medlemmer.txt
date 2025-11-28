@@ -1,12 +1,4 @@
-kian
-adilsvej 10
-23
-balder
-galvej 23
-45
-morten
-købervej 3
-34
-Casper
-kongegade
-45
+kian,23,passivt,true
+balder,45,aktivt,false
+morten,34,passivt,true
+Caper,45,Passivt,true
