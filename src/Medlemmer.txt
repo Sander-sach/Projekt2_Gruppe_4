@@ -1,4 +1,2 @@
-kian,23,passivt,true
-balder,45,aktivt,false
-morten,34,passivt,true
-Caper,45,Passivt,true
+kian,23,457834,bongovej 12,kain@123.dk,passivt,true,3456,345678
+Caper,45,23884738,sander@castagna.dk,allegade27,passivt,true,4567,2345765
