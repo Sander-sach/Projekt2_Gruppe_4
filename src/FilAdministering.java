@@ -3,12 +3,11 @@ import java.io.*;
 public class FilAdministering {
    private FileReader filr;
    private BufferedReader ind;
-   static ArrayList<Medlem> mList = new ArrayList<>();
    private FileWriter filw;
    private BufferedWriter ud;
 
     //Henter listen af medlemmer til en ArrayList af dem
-    public void getMedlemsData() throws IOException {
+    void hentMedlemsData(ArrayList<Medlem> medlemmer) throws IOException {
         filr = new FileReader("src//Medlemmer.txt");
         ind = new BufferedReader(filr);
         String linje;
@@ -26,7 +25,7 @@ public class FilAdministering {
 
             //Derefter indlæses medlemstypen
             String aktivitetstype = medlem[5];
-            boolean konkurrence = Boolean.parseBoolean(medlem[6]);
+            Boolean konkurrence = medlem[6].equals("#")? null: Boolean.parseBoolean(medlem[6]);
 
             // til sidste indlæses betalingsoplysninger:
             int regiNr = Integer.parseInt(medlem[7]);
@@ -37,31 +36,27 @@ public class FilAdministering {
             PersonInfo per=new PersonInfo(navn,alder,telefon,email,adresse);
            //Medlem bliver oprettet som objekt og tilføjet en ArrayList
             Medlem m = new Medlem(per,aktivitetstype, konkurrence,bet);
-            mList.add(m);
+            medlemmer.add(m);
         }
     }
 
     // Gemmer nye medlemmer i filen
     public void saveMedlemsData(Medlem sm) throws IOException {
-        //Henter Data på alle eksiterende medlemmer
-        FilAdministering f1 = new FilAdministering();
-        f1.getMedlemsData();
-        boolean noMatch=true;
-        //Loope Kontrollere om nye medlems data allerede eksitere
-        for (Medlem m : mList) {
-            if ((sm.verificerMedlem().equals(m.verificerMedlem()))) {
-                System.out.println("Medlems info eksistere allerede!");
-                noMatch = false;
-                break;
-            }
+        //Tilføjer nye medlem til filen
+        filw = new FileWriter("src//Medlemmer.txt", true);
+        ud = new BufferedWriter(filw);
+        ud.write(sm.saveMedlem());
+        ud.close();
+    }
+
+    // håndtere redigering af medlemmer og opdatere txt fil med ændringer:
+    public void opdaterMedlemsData(ArrayList<Medlem> list)throws IOException{
+        filw = new FileWriter("src//Medlemmer.txt");
+        ud = new BufferedWriter(filw);
+        for(Medlem m:list){
+            ud.write(m.saveMedlem()+"\n");
         }
-        //Tilføjer nye medlem til filen hvis de ikke allerede er der
-        if (noMatch) {
-            filw = new FileWriter("src//Medlemmer.txt", true);
-            ud = new BufferedWriter(filw);
-            ud.write(sm.saveMedlem());
-            ud.close();
-        }
+        ud.close();
     }
 
 
@@ -72,7 +67,8 @@ public class FilAdministering {
         Medlem m1=new Medlem(p1,"passivt",true,b1);
         FilAdministering fa1=new FilAdministering();
         //fa1.getMedlemsData();
-        fa1.saveMedlemsData(m1);
+        //fa1.saveMedlemsData(m1);
+        //fa1.opdaterMedlemsData();
 
 
 

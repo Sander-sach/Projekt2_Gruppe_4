@@ -3,30 +3,33 @@ public class Medlem {
     private PersonInfo personinfo;
     private BetalingsInfo betalingsinfo;
     String aktivitetstype;
-    boolean konkurrence;
+    Boolean konkurrence;
 
-    Medlem(PersonInfo personin, String aktivitetstype, boolean konkurrence,BetalingsInfo betalingsin) {
+    Medlem(PersonInfo personin, String aktivitetstype, Boolean konkurrence, BetalingsInfo betalingsin) {
         this.personinfo = personin;
-        this.betalingsinfo=betalingsin;
+        this.betalingsinfo = betalingsin;
         this.aktivitetstype = aktivitetstype;
         this.konkurrence = konkurrence;
-
     }
 
     //return
-   public String getNavn() {
+    public String getNavn() {
         return personinfo.getNavnPer();
     }
-    public String getEmail(){
+
+    public String getEmail() {
         return personinfo.getEmailPer();
     }
-    public String getAdresse(){
+
+    public String getAdresse() {
         return personinfo.getAdressePer();
     }
-    public int getTelefon(){
+
+    public int getTelefon() {
         return personinfo.getTelefonPer();
     }
-    public int getAlder(){
+
+    public int getAlder() {
         return personinfo.getAlderPer();
     }
 
@@ -34,41 +37,65 @@ public class Medlem {
         return aktivitetstype;
     }
 
-    boolean getKonkurrence() {
-        return konkurrence;
+    String getKonkurrence() {
+        return (konkurrence ? "Konkurrence" : "Motionist");
     }
-    //toString metode til udprintning af medlems liste
-    public String toString(){
-        return personinfo.getPersonInfo()+
-                ","+ aktivitetstype+
-                ","+(konkurrence ? "Konkurrence" : "Motionist")+
-                ","+betalingsinfo.getBetalingsInfo();
+
+    // setter til ændringer af medlemsoplysninger
+    public void setNavn(String navn) {
+        personinfo.setNavnPer(navn);
     }
+
+    public void setEmail(String email) {
+        personinfo.setEmailPer(email);
+    }
+
+    public void setAdresse(String adresse) {
+        personinfo.setAdressePer(adresse);
+    }
+
+    public void setTelefon(int telefon) {
+        personinfo.setTelefonPer(telefon);
+    }
+
+    public void setRegiNr(Integer regiNr) {
+        betalingsinfo.setRegiBet(regiNr);
+    }
+
+    public void setKontoNr(Integer kontoNr) {
+        betalingsinfo.setKontoBet(kontoNr);
+    }
+
+    public void setAktivitetstype(String akt) {
+        if (akt != null) this.aktivitetstype = akt;
+    }
+
+    public void setKonkurrence(Boolean kon) {
+        if (kon != null) this.konkurrence = kon;
+    }
+
+    //toString metode til udprintning af medlemmer
+    public String toString() {
+        return personinfo.getPersonInfo() +
+                "," + aktivitetstype +
+                "," + (konkurrence == null ? "#" : (konkurrence ? "Konkurrence" : "Montionist")) +
+                "," + betalingsinfo.getBetalingsInfo();
+    }
+
     // ToString metode til at gemme medlemmers Booleans som True eller False i .txt dokumenter
-    public String saveMedlem(){
-        return personinfo.getPersonInfo()+
-                ","+aktivitetstype+
-                ","+konkurrence+
-                ","+betalingsinfo.getBetalingsInfo();
+    public String saveMedlem() {
+        return personinfo.getPersonInfo() +
+                "," + aktivitetstype +
+                "," + (konkurrence != null ? String.valueOf(konkurrence) : "#") +
+                "," + betalingsinfo.getBetalingsInfo();
     }
 
-    public String verificerMedlem(){
-        return getTelefon()+getEmail();
+    public String verificerMedlem() {
+        return getTelefon() + getEmail();
     }
-}
-//Under klasse
-class svømmeMedlem extends Medlem{
-    public svømmeMedlem(PersonInfo personinfo, boolean konkurrence,BetalingsInfo betalingsinfo ){
-        super(personinfo,"svømning",konkurrence,betalingsinfo);
+    // main til test
+    public static void main(String[] args) {
 
-    }
-}
-
-//main der printer ud for at prøve at se hvordan det ville se ud
-class main{
-    public static void main(String[] args){
-
-
-    }
-}
+    }//main
+}//Medlem
 

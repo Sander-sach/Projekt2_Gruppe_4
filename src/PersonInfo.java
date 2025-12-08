@@ -27,6 +27,19 @@ public class PersonInfo {
     public int getAlderPer(){
         return alder;
     }
+    //setter til Personoplysnings ændringer
+    public void setNavnPer(String navn){
+        if(navn!=null)this.navn=navn;
+    }
+    public void setEmailPer(String email){
+        if(email!=null)this.email=email;
+    }
+    public void setAdressePer(String adresse){
+        if(adresse!=null)this.adresse=adresse;
+    }
+    public void setTelefonPer(Integer telefon){
+        if(telefon!=null)this.telefon=telefon;
+    }
 
     public String getPersonInfo(){
         return navn+","+alder+","+telefon+","+email+","+adresse;
