@@ -1,4 +1,4 @@
 kian,23,457834,kain@123.dk,bongovej 12,passivt,true,3456,345678
 balder,45,563423,balder@123.dk,billevej 34,aktivt,false,4556,567889
 morten,34,903456,morten@123.dk,tupevej 23,aktivt,true,5678,23905
-Sander,45,41431195,Sander.o.christensen@gmail.com,Allegade 27,passivt,#,5656,291002
+Sander,45,23884731,Sander.o.christensen@gmail.com,Allegade 27,passivt,#,5656,291002

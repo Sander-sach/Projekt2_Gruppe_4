@@ -39,12 +39,7 @@ public class MedlemsAdministrering {
         }
 
         void redigerMedlem(Medlem m,Scanner input)throws IOException{
-        Boolean konkurrence;
-        String stast;
-        Integer itast;
-        String aktivitetstype;
-        int regiNr;
-        int kontoNr;
+        //SubMenu udskrives
         System.out.println("Rediger Personoplysninger tast 1:\n" +
                         "Rediger Betalingsoplysninger tast 2:\n" +
                         "Rediger Aktivitets eller Medlemstype tast 3:\n" +
@@ -54,54 +49,76 @@ public class MedlemsAdministrering {
             input.nextLine();
         switch(valg){
             //Personoplsyning redigeres
-            case 1:
-                System.out.println("Tast navn ændring: ");
-                stast=ScannerHelp.skipString(input);
-                if(stast==null) {System.out.println("Skipped");
-                }else m.setNavn(stast);
-                System.out.println("Tast telefon ændring: ");
-                itast=ScannerHelp.skipInteger(input);
-                if(itast==null) {System.out.println("Skipped");
-                }else m.setTelefon(itast);
-                System.out.println("Tast Email ændring: ");
-                stast=ScannerHelp.skipString(input);
-                if(stast==null) {System.out.println("Skipped");
-                }else m.setEmail(stast);
-                System.out.println("Tast adresse ændring: ");
-                stast=ScannerHelp.skipString(input);
-                if(stast==null) {System.out.println("Skipped");
-                }else m.setAdresse(stast);
-
+            case 1: MedlemsAdministrering.redigerPersonOp(m,input);
             break;
             //Betalingsoplysninger redigeres
-            case 2:
-                System.out.println("Tast Registeringnummer: ");
-                regiNr=input.nextInt();
-                m.setRegiNr(regiNr);
-                System.out.println("Tast Kontonummer: ");
-                kontoNr=input.nextInt();
-                m.setKontoNr(kontoNr);
-                input.nextLine();
+            case 2: MedlemsAdministrering.redigerBetalingOp(m,input);
             break;
             //Medlemstype redigeres
-            case 3:
-                System.out.println("Tast Aktivitetstype(Aktivt/Passivt): ");
-                aktivitetstype=input.next();
-                m.setAktivitetstype(aktivitetstype);
-                if(aktivitetstype.equalsIgnoreCase("aktivt")){
-                    System.out.println("Vælg Konkurrence eller Motionistmedlem(true/false): ");
-                    konkurrence=input.nextBoolean();
-                    m.setKonkurrence(konkurrence);
-                }else {
-                    konkurrence=null;
-                    m.setKonkurrence(konkurrence);}
-                input.nextLine();
-
+            case 3: MedlemsAdministrering.redigerMedlemsType(m,input);
+            break;
             default: System.out.println("Ugyldigt valg");
         }
+        //ændringer gemmes
             fil.opdaterMedlemsData(medlemmer);
+            System.out.println("Ændringe Gemt!");
     }
 
+    static void redigerPersonOp(Medlem m,Scanner input){
+        String stast;
+        Integer itast;
+        //Static ScannerHelp metode bliver kaldt på alle oplsyninger bruge vil ændre
+        //ScannerHelp metode gør det muligt at skippe hvis man ikke vil ændre noget.
+        System.out.println("Tast navn ændring: ");
+        stast=ScannerHelp.skipString(input);
+        if(stast==null) {System.out.println("Skipped");
+        }else m.setNavn(stast);
+
+        System.out.println("Tast telefon ændring: ");
+        itast=ScannerHelp.skipInteger(input);
+        if(itast==null) {System.out.println("Skipped");
+        }else m.setTelefon(itast);
+
+        System.out.println("Tast Email ændring: ");
+        stast=ScannerHelp.skipString(input);
+        if(stast==null) {System.out.println("Skipped");
+        }else m.setEmail(stast);
+
+        System.out.println("Tast adresse ændring: ");
+        stast=ScannerHelp.skipString(input);
+        if(stast==null) {System.out.println("Skipped");
+        }else m.setAdresse(stast);
+    }
+
+    static void redigerBetalingOp(Medlem m,Scanner input){
+        int regiNr;
+        int kontoNr;
+
+        System.out.println("Tast Registeringsnummer: ");
+        regiNr=input.nextInt();
+        m.setRegiNr(regiNr);
+        System.out.println("Tast Kontonummer: ");
+        kontoNr=input.nextInt();
+        m.setKontoNr(kontoNr);
+        input.nextLine();
+    }
+
+    static void redigerMedlemsType(Medlem m,Scanner input){
+        Boolean konkurrence;
+        String aktivitetstype;
+
+        System.out.println("Tast Aktivitetstype(Aktivt/Passivt): ");
+        aktivitetstype=input.next();
+        m.setAktivitetstype(aktivitetstype);
+        if(aktivitetstype.equalsIgnoreCase("aktivt")){
+            System.out.println("Vælg Konkurrence eller Motionistmedlem(true/false): ");
+            konkurrence=input.nextBoolean();
+            m.setKonkurrence(konkurrence);
+        }else {
+            konkurrence=null;
+            m.setKonkurrence(konkurrence);}
+        input.nextLine();
+    }
 }
 
 

@@ -64,12 +64,6 @@ public class FilAdministering {
     public static void main(String[] arg) throws IOException {
         PersonInfo p1=new PersonInfo("Caper",45,23884738,"sander@castagna.dk","allegade27");
         BetalingsInfo b1=new BetalingsInfo(4567,2345765);
-        Medlem m1=new Medlem(p1,"passivt",true,b1);
-        FilAdministering fa1=new FilAdministering();
-        //fa1.getMedlemsData();
-        //fa1.saveMedlemsData(m1);
-        //fa1.opdaterMedlemsData();
-
 
 
         }//main()

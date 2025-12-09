@@ -67,11 +67,11 @@ public class Medlem {
     }
 
     public void setAktivitetstype(String akt) {
-        if (akt != null) this.aktivitetstype = akt;
+        this.aktivitetstype = akt;
     }
 
     public void setKonkurrence(Boolean kon) {
-        if (kon != null) this.konkurrence = kon;
+         this.konkurrence = kon;
     }
 
     //toString metode til udprintning af medlemmer
