@@ -19,6 +19,9 @@ public class MenuSystem {
     static TrainingResult trainingResult = new TrainingResult();
     static ArrayList<TrainingResult.KonkurrenceSvømmer> konkurrenceSvømmere = new ArrayList<>();
 
+    // til kasserer-delen (kontingenter)
+    static KontingentAdministrering kontAdmin = new KontingentAdministrering();
+
     // ====================
     // LOGIN
     // ====================
@@ -188,6 +191,82 @@ public class MenuSystem {
     }
 
     // ====================
+    // KASSERER-MENU (kontingent)
+    // ====================
+    static void kassererMenu(Scanner input, Rolle rolle) {
+
+        if (!(rolle == Rolle.KASSERER || rolle == Rolle.FORMAND)) {
+            System.out.println("Kun KASSERER eller FORMAND har adgang til kasserer-menuen.");
+            return;
+        }
+
+        // Hent kontingenter automatisk én gang, når man går ind i menuen
+        try {
+            kontAdmin.hentKontingentListe();
+            System.out.println("Kontingentliste hentet fra fil.");
+        } catch (IOException e) {
+            System.out.println("Fejl ved indlæsning af kontingentfil: " + e.getMessage());
+            return; // kan ikke lave kasserer-menu uden data
+        }
+
+        boolean kør = true;
+
+        while (kør) {
+            System.out.println("\n--- KASSERER MENU ---");
+            System.out.println("1. Vis alle kontingenter");
+            System.out.println("2. Rediger betaling for medlem");
+            System.out.println("3. Tilbage");
+            System.out.print("Vælg: ");
+
+            int valg = input.nextInt();
+            input.nextLine();
+
+            switch (valg) {
+                case 1: {
+                    System.out.println("\n--- Kontingentliste ---");
+                    kontAdmin.printKontigentListe();
+                    break;
+                }
+
+                case 2: {
+                    try {
+                        System.out.print("Registreringsnummer: ");
+                        int regiNr = Integer.parseInt(input.nextLine());
+
+                        System.out.print("Kontonummer: ");
+                        int kontoNr = Integer.parseInt(input.nextLine());
+
+                        KontingentInfo k = kontAdmin.findKontingent(regiNr, kontoNr);
+
+                        if (k == null) {
+                            System.out.println("Ingen kontingent fundet for den konto.");
+                            break;
+                        }
+
+                        System.out.println("Fundet kontingent:");
+                        System.out.println(k);
+
+                        kontAdmin.redigerBetaling(k, input);
+
+                    } catch (NumberFormatException e) {
+                        System.out.println("Du skal indtaste tal for regi- og kontonummer.");
+                    } catch (IOException e) {
+                        System.out.println("Fejl ved opdatering af kontingentfil: " + e.getMessage());
+                    }
+                    break;
+                }
+
+                case 3:
+                    kør = false;
+                    break;
+
+                default:
+                    System.out.println("Ugyldigt valg.");
+            }
+        }
+    }
+
+    // ====================
     // HOVEDMENU (medlemmer)
     // ====================
     public static void main(String[] args) {
@@ -210,10 +289,11 @@ public class MenuSystem {
             System.out.println("\n--- HOVEDMENU ---");
             System.out.println("1. Registrer medlem");
             System.out.println("2. Søg medlem (telefon)");
-            System.out.println("3. Slet medlem (telefon) [kun FORMAMD]");
+            System.out.println("3. Slet medlem (telefon) [kun FORMAND]");
             System.out.println("4. Rediger medlem");
             System.out.println("5. Træner-menu (konkurrencesvømmere)");
-            System.out.println("6. Afslut");
+            System.out.println("6. Kasserer-menu (kontingenter)");
+            System.out.println("7. Afslut");
             System.out.print("Vælg: ");
 
             int valg = input.nextInt();
@@ -297,7 +377,11 @@ public class MenuSystem {
                         traenerMenu(input, rolle);
                         break;
 
-                    case 6:
+                    case 6: // KASSERER-MENU
+                        kassererMenu(input, rolle);
+                        break;
+
+                    case 7:
                         kør = false;
                         System.out.println("Programmet afsluttes.");
                         break;
@@ -312,3 +396,4 @@ public class MenuSystem {
         }
     }
 }
+
