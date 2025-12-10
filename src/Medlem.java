@@ -1,18 +1,36 @@
 public class Medlem {
-    //personoplysninger/Medlemstype
-    private PersonInfo personinfo;
-    private BetalingsInfo betalingsinfo;
+    // personoplysninger/Medlemstype
+    public PersonInfo personinfo;
+    public BetalingsInfo betalingsinfo;
     String aktivitetstype;
     Boolean konkurrence;
 
-    Medlem(PersonInfo personin, String aktivitetstype, Boolean konkurrence, BetalingsInfo betalingsin) {
+    // CONSTRUCTOR brugt af FilAdministering
+    public Medlem(PersonInfo personin, String aktivitetstype, Boolean konkurrence, BetalingsInfo betalingsin) {
         this.personinfo = personin;
         this.betalingsinfo = betalingsin;
         this.aktivitetstype = aktivitetstype;
         this.konkurrence = konkurrence;
     }
 
-    //return
+    // NY CONSTRUCTOR brugt i Main:
+    // Medlem nyt = new Medlem(navn, telefon, email, adresse, aktivitetstype, konkurrence);
+    public Medlem(String navn, int telefon, String email, String adresse,
+                  String aktivitetstype, Boolean konkurrence) {
+
+        this.personinfo = new PersonInfo();
+        this.personinfo.setNavnPer(navn);
+        this.personinfo.setTelefonPer(telefon);
+        this.personinfo.setEmailPer(email);
+        this.personinfo.setAdressePer(adresse);
+        // Alder kan sættes senere evt.
+
+        this.betalingsinfo = new BetalingsInfo(); // standard tom betalingsinfo
+        this.aktivitetstype = aktivitetstype;
+        this.konkurrence = konkurrence;
+    }
+
+    // return
     public String getNavn() {
         return personinfo.getNavnPer();
     }
@@ -41,7 +59,7 @@ public class Medlem {
         return (konkurrence ? "Konkurrence" : "Motionist");
     }
 
-    // setter til ændringer af medlemsoplysninger
+    // setters
     public void setNavn(String navn) {
         personinfo.setNavnPer(navn);
     }
@@ -74,15 +92,13 @@ public class Medlem {
          this.konkurrence = kon;
     }
 
-    //toString metode til udprintning af medlemmer
     public String toString() {
         return personinfo.getPersonInfo() +
                 "," + aktivitetstype +
-                "," + (konkurrence == null ? "#" : (konkurrence ? "Konkurrence" : "Montionist")) +
+                "," + (konkurrence == null ? "#" : (konkurrence ? "Konkurrence" : "Motionist")) +
                 "," + betalingsinfo.getBetalingsInfo();
     }
 
-    // ToString metode til at gemme medlemmers Booleans som True eller False i .txt dokumenter
     public String saveMedlem() {
         return personinfo.getPersonInfo() +
                 "," + aktivitetstype +
@@ -93,9 +109,5 @@ public class Medlem {
     public String verificerMedlem() {
         return getTelefon() + getEmail();
     }
-    // main til test
-    public static void main(String[] args) {
-
-    }//main
-}//Medlem
+}
 
