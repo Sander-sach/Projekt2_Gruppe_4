@@ -78,17 +78,18 @@ public class TraenerMenu {
                     String navn = input.nextLine();
 
                     System.out.print("Telefon: ");
-                    int telefon = input.nextInt();
+                    int telefon = ScannerHelp.checkInputInt(input);
                     input.nextLine();
 
                     System.out.print("Email: ");
                     String email = input.nextLine();
 
+
                     System.out.print("Adresse: ");
                     String adresse = input.nextLine();
 
                     System.out.print("Aktivitetstype (fx 'aktivt'): ");
-                    String aktivitetstype = input.nextLine();
+                    String aktivitetstype = ScannerHelp.checkInputType(input);
 
                     Boolean konkurrence = true; // konkurrencesvømmer
                     // Brug din ekstra Medlem-constructor
@@ -200,20 +201,17 @@ public class TraenerMenu {
     }
 
     // Hjælpefunktion: vælg svømmer
-    private static TrainingResult.KonkurrenceSvømmer vælgSvømmer(
-            Scanner input,
-            ArrayList<TrainingResult.KonkurrenceSvømmer> liste) {
-
-        if (liste.isEmpty()) {
-            System.out.println("Der er ingen konkurrencesvømmere endnu.");
+    private static TrainingResult.KonkurrenceSvømmer vælgSvømmer(Scanner input, ArrayList<TrainingResult.KonkurrenceSvømmer> liste) {
+        if (liste.isEmpty()) { System.out.println("Der er ingen konkurrencesvømmere endnu.");
             return null;
         }
-
         System.out.println("Vælg svømmer:");
+
         for (int i = 0; i < liste.size(); i++) {
             Medlem m = liste.get(i).getMedlem();
             System.out.println((i + 1) + ". " + m.getNavn() + " (tlf: " + m.getTelefon() + ")");
         }
+
         System.out.print("Valg: ");
         int valg = input.nextInt();
         input.nextLine();
@@ -228,10 +226,13 @@ public class TraenerMenu {
     // Hjælpefunktion: vælg disciplin
     private static TrainingResult.Discipline vælgDisciplin(Scanner input) {
         System.out.println("Vælg disciplin:");
+
         TrainingResult.Discipline[] discipliner = TrainingResult.Discipline.values();
+
         for (int i = 0; i < discipliner.length; i++) {
             System.out.println((i + 1) + ". " + discipliner[i]);
         }
+
         System.out.print("Valg: ");
         int valg = input.nextInt();
         input.nextLine();

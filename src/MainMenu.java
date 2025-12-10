@@ -24,8 +24,8 @@ void Menu()throws IOException{
 
                 case 1: // Tilføj medlem
                     System.out.print("Navn: ");
-                    String navn = input.next();
-                    input.nextLine();
+                    String navn = input.nextLine();
+
 
                     System.out.print("Alder: ");
                     int alder = ScannerHelp.checkInputInt(input);
@@ -36,12 +36,12 @@ void Menu()throws IOException{
                     input.nextLine();
 
                     System.out.print("Email: ");
-                    String email = input.next();
-                    input.nextLine();
+                    String email = input.nextLine();
+
 
                     System.out.print("Adresse: ");
-                    String adresse = input.next();
-                    input.nextLine();
+                    String adresse = input.nextLine();
+
 
                     System.out.print("Passivt eller Aktivt?: ");
                     String aktivtype=ScannerHelp.checkInputType(input);
@@ -91,7 +91,7 @@ void Menu()throws IOException{
 
                 case 3: // Slet medlem med kode
                     System.out.print("Indtast kode: ");
-                    String kode = input.next();
+                    String kode=input.nextLine();
 
                     if (!kode.equals("1234")) {
                         System.out.println("Forkert kode!");

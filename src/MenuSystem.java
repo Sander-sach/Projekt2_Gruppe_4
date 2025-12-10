@@ -247,9 +247,9 @@ public class MenuSystem {
                         }
 
                         Medlem nyt = new Medlem(navn, telefon, email, adresse, aktivitetstype, konkurrence);
-                        Medlem tjek = admin.tjekNyMedlemsData(nyt);
-                        if (tjek != null) {
-                            admin.registrerMedlem(tjek);
+                        boolean tjek = admin.tjekNyMedlemsData(nyt);
+                        if (tjek != false) {
+                            admin.registrerMedlem(nyt);
                             System.out.println("Medlem registreret!");
                         }
                         break;
