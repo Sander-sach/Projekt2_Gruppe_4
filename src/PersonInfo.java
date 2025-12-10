@@ -1,54 +1,78 @@
 public class PersonInfo {
-   private String navn;
-    private int alder;
-    private String adresse;
-    private int telefon;
-    private String email;
 
-    PersonInfo(String navn, int alder,int telefon,String email, String adresse){
-        this.navn=navn;
-        this.alder=alder;
-        this.adresse=adresse;
-        this.email=email;
-        this.telefon=telefon;
-    }
-    public String getNavnPer(){
-        return navn;
-    }
-    public String getEmailPer(){
-        return email;
-    }
-    public String getAdressePer(){
-        return adresse;
-    }
-    public int getTelefonPer(){
-        return telefon;
-    }
-    public int getAlderPer(){
-        return alder;
-    }
-    //setter til Personoplysnings ændringer
-    public void setNavnPer(String navn){
-        if(navn!=null)this.navn=navn;
-    }
-    public void setEmailPer(String email){
-        if(email!=null)this.email=email;
-    }
-    public void setAdressePer(String adresse){
-        if(adresse!=null)this.adresse=adresse;
-    }
-    public void setTelefonPer(Integer telefon){
-        if(telefon!=null)this.telefon=telefon;
+    // Felter (samme rækkefølge som i filen: navn, alder, telefon, email, adresse)
+    private String navnPer;
+    private int alderPer;
+    private int telefonPer;
+    private String emailPer;
+    private String adressePer;
+
+    // Tom constructor (bruges i Medlem)
+    public PersonInfo() {
     }
 
-    public String savePersonInfo(){
-        return navn+","+alder+","+telefon+","+email+","+adresse;
+    // Constructor der matcher FilAdministering:
+    // new PersonInfo(navn, alder, telefon, email, adresse)
+    public PersonInfo(String navnPer, int alderPer, int telefonPer,
+                      String emailPer, String adressePer) {
+        this.navnPer = navnPer;
+        this.alderPer = alderPer;
+        this.telefonPer = telefonPer;
+        this.emailPer = emailPer;
+        this.adressePer = adressePer;
+    }
+
+    // Getters
+    public String getNavnPer() {
+        return navnPer;
+    }
+
+    public int getAlderPer() {
+        return alderPer;
+    }
+
+    public int getTelefonPer() {
+        return telefonPer;
+    }
+
+    public String getEmailPer() {
+        return emailPer;
+    }
+
+    public String getAdressePer() {
+        return adressePer;
+    }
+
+    // Setters
+    public void setNavnPer(String navnPer) {
+        this.navnPer = navnPer;
+    }
+
+    public void setAlderPer(int alderPer) {
+        this.alderPer = alderPer;
+    }
+
+    public void setTelefonPer(int telefonPer) {
+        this.telefonPer = telefonPer;
+    }
+
+    public void setEmailPer(String emailPer) {
+        this.emailPer = emailPer;
+    }
+
+    public void setAdressePer(String adressePer) {
+        this.adressePer = adressePer;
+    }
+    // Bruges i Medlem.saveMedlem()/toString()
+    public String savePersonInfo() {
+        // Samme rækkefølge som i FilAdministering: navn, alder, telefon, email, adresse
+        return navnPer + "," + alderPer + "," + telefonPer + "," + emailPer + "," + adressePer;
     }
     public String getPersonInfo(){
-        return " | Navn: "+navn+"\n"+
-                " | Alder: "+ alder+"\n"+
-                " | Telefon: "+telefon+"\n" +
-                " | Email: "+email+"\n"+
-                " | Adresse: "+adresse;
+        return " | Navn: "+navnPer+"\n"+
+                " | Alder: "+ alderPer+"\n"+
+                " | Telefon: "+telefonPer+"\n" +
+                " | Email: "+emailPer+"\n"+
+                " | Adresse: "+adressePer;
     }
 }

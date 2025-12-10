@@ -5,9 +5,27 @@ public class Medlem {
     String aktivitetstype;
     Boolean konkurrence;
 
-    Medlem(PersonInfo personin, String aktivitetstype, Boolean konkurrence, BetalingsInfo betalingsin) {
+    // CONSTRUCTOR brugt af FilAdministering
+    public Medlem(PersonInfo personin, String aktivitetstype, Boolean konkurrence, BetalingsInfo betalingsin) {
         this.personinfo = personin;
         this.betalingsinfo = betalingsin;
+        this.aktivitetstype = aktivitetstype;
+        this.konkurrence = konkurrence;
+    }
+
+    // NY CONSTRUCTOR brugt i Main:
+    // Medlem nyt = new Medlem(navn, telefon, email, adresse, aktivitetstype, konkurrence);
+    public Medlem(String navn, int telefon, String email, String adresse,
+                  String aktivitetstype, Boolean konkurrence) {
+
+        this.personinfo = new PersonInfo();
+        this.personinfo.setNavnPer(navn);
+        this.personinfo.setTelefonPer(telefon);
+        this.personinfo.setEmailPer(email);
+        this.personinfo.setAdressePer(adresse);
+        // Alder kan sættes senere evt.
+
+        this.betalingsinfo = new BetalingsInfo(); // standard tom betalingsinfo
         this.aktivitetstype = aktivitetstype;
         this.konkurrence = konkurrence;
     }
