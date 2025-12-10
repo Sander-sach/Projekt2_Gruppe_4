@@ -10,19 +10,19 @@ enum Rolle {
 }
 
 public class MenuSystem {
-
+    Scanner input = new Scanner(System.in);
     static final String KODE_TRAENER  = "Traener1";
     static final String KODE_FORMAND  = "Formand1";
     static final String KODE_KASSERER = "Kassere1";
 
     // til trænerdelen
-    static TrainingResult trainingResult = new TrainingResult();
-    static ArrayList<TrainingResult.KonkurrenceSvømmer> konkurrenceSvømmere = new ArrayList<>();
+     TrainingResult trainingResult = new TrainingResult();
+     ArrayList<TrainingResult.KonkurrenceSvømmer> konkurrenceSvømmere = new ArrayList<>();
 
     // ====================
     // LOGIN
     // ====================
-    static boolean erGyldigKode(String kode) {
+     boolean erGyldigKode(String kode) {
         if (kode.length() < 8) return false;
         boolean harStor = false, harLille = false, harTal = false;
         for (int i = 0; i < kode.length(); i++) {
@@ -34,7 +34,7 @@ public class MenuSystem {
         return harStor && harLille && harTal;
     }
 
-    static Rolle fåRolleFraKode(String kode) {
+     Rolle fåRolleFraKode(String kode) {
         if (!erGyldigKode(kode)) return null;
         if (kode.equals(KODE_TRAENER))  return Rolle.TRAENER;
         if (kode.equals(KODE_FORMAND))  return Rolle.FORMAND;
@@ -42,7 +42,7 @@ public class MenuSystem {
         return null;
     }
 
-    static Rolle loginMenu(Scanner input) {
+     Rolle loginMenu(Scanner input) {
         System.out.println("--- LOGIN ---");
         System.out.print("Indtast rolle-kode: ");
         String kode = input.nextLine();
@@ -59,7 +59,7 @@ public class MenuSystem {
     // ====================
     // TRÆNER-MENU (simpel)
     // ====================
-    static void traenerMenu(Scanner input, Rolle rolle) {
+     void traenerMenu(Scanner input, Rolle rolle) {
 
         if (!(rolle == Rolle.TRAENER || rolle == Rolle.FORMAND)) {
             System.out.println("Kun TRÆNER eller FORMAND har adgang til træner-menuen.");
@@ -192,123 +192,5 @@ public class MenuSystem {
     // ====================
     public static void main(String[] args) {
 
-        Scanner input = new Scanner(System.in);
-        MedlemsAdministrering admin = new MedlemsAdministrering();
-
-        try {
-            admin.hentMedlemsListe();
-        } catch (IOException e) {
-            System.out.println("Kunne ikke hente medlemsdata: " + e.getMessage());
-        }
-
-        Rolle rolle = loginMenu(input);
-        if (rolle == null) return;
-
-        boolean kør = true;
-
-        while (kør) {
-            System.out.println("\n--- HOVEDMENU ---");
-            System.out.println("1. Registrer medlem");
-            System.out.println("2. Søg medlem (telefon)");
-            System.out.println("3. Slet medlem (telefon) [kun FORMAMD]");
-            System.out.println("4. Rediger medlem");
-            System.out.println("5. Træner-menu (konkurrencesvømmere)");
-            System.out.println("6. Afslut");
-            System.out.print("Vælg: ");
-
-            int valg = input.nextInt();
-            input.nextLine();
-
-            try {
-                switch (valg) {
-
-                    case 1: // registrer
-                        System.out.print("Navn: ");
-                        String navn = input.nextLine();
-
-                        System.out.print("Telefon: ");
-                        int telefon = input.nextInt();
-                        input.nextLine();
-
-                        System.out.print("Email: ");
-                        String email = input.nextLine();
-
-                        System.out.print("Adresse: ");
-                        String adresse = input.nextLine();
-
-                        System.out.print("Aktivitetstype (Aktivt/Passivt): ");
-                        String aktivitetstype = input.nextLine();
-
-                        Boolean konkurrence = null;
-                        if (aktivitetstype.equalsIgnoreCase("aktivt")) {
-                            System.out.print("Konkurrencemedlem? (true/false): ");
-                            konkurrence = input.nextBoolean();
-                            input.nextLine();
-                        }
-
-                        Medlem nyt = new Medlem(navn, telefon, email, adresse, aktivitetstype, konkurrence);
-                        boolean tjek = admin.tjekNyMedlemsData(nyt);
-                        if (tjek != false) {
-                            admin.registrerMedlem(nyt);
-                            System.out.println("Medlem registreret!");
-                        }
-                        break;
-
-                    case 2: // find
-                        System.out.print("Indtast telefonnummer: ");
-                        int søgTlf = input.nextInt();
-                        input.nextLine();
-
-                        Medlem fundet = admin.findMedlem(søgTlf);
-                        if (fundet != null) {
-                            System.out.println(fundet);
-                        } else {
-                            System.out.println("Ingen medlem med det telefonnummer.");
-                        }
-                        break;
-
-                    case 3: // slet (kun formand)
-                        if (rolle != Rolle.FORMAND) {
-                            System.out.println("Kun FORMAND må slette medlemmer.");
-                            break;
-                        }
-                        System.out.print("Telefonnummer på medlem der skal slettes: ");
-                        int sletTlf = input.nextInt();
-                        input.nextLine();
-
-                        admin.sletMedlem(sletTlf);
-                        System.out.println("Sletning forsøgt (hvis medlemmet fandtes, er det nu slettet).");
-                        break;
-
-                    case 4: // rediger
-                        System.out.print("Telefonnummer på medlem der skal redigeres: ");
-                        int redigTlf = input.nextInt();
-                        input.nextLine();
-
-                        Medlem redigMedlem = admin.findMedlem(redigTlf);
-                        if (redigMedlem != null) {
-                            admin.redigerMedlem(redigMedlem, input);
-                        } else {
-                            System.out.println("Ingen medlem med det telefonnummer.");
-                        }
-                        break;
-
-                    case 5: // TRÆNER-MENU
-                        traenerMenu(input, rolle);
-                        break;
-
-                    case 6:
-                        kør = false;
-                        System.out.println("Programmet afsluttes.");
-                        break;
-
-                    default:
-                        System.out.println("Ugyldigt valg.");
-                }
-
-            } catch (IOException e) {
-                System.out.println("Fejl ved filhåndtering: " + e.getMessage());
-            }
-        }
     }
 }

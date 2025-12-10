@@ -39,7 +39,6 @@ class TrainingResult {
         public String toString() {
             return discipline + "," + time + "," + date;
         }
-
     }
 
     public class CompetitionResult {
@@ -77,7 +76,7 @@ class TrainingResult {
         private HashMap<Discipline, Result> bestTrainingResults = new HashMap<>();
         private ArrayList<CompetitionResult> competitionResults = new ArrayList<>();
 
-        public KonkurrenceSvømmer(Medlem medlem) {
+        public KonkurrenceSvømmer(Medlem medlem){
             this.medlem = medlem;
         }
 
