@@ -41,7 +41,14 @@ public class PersonInfo {
         if(telefon!=null)this.telefon=telefon;
     }
 
-    public String getPersonInfo(){
+    public String savePersonInfo(){
         return navn+","+alder+","+telefon+","+email+","+adresse;
+    }
+    public String getPersonInfo(){
+        return " | Navn: "+navn+"\n"+
+                " | Alder: "+ alder+"\n"+
+                " | Telefon: "+telefon+"\n" +
+                " | Email: "+email+"\n"+
+                " | Adresse: "+adresse;
     }
 }

@@ -7,7 +7,7 @@ public class FilAdministering {
    private BufferedWriter ud;
 
     //Henter listen af medlemmer til en ArrayList af dem
-    void hentMedlemsData(ArrayList<Medlem> medlemmer) throws IOException {
+    void hentMedlemsFil(ArrayList<Medlem> medlemmer) throws IOException {
         filr = new FileReader("src//Medlemmer.txt");
         ind = new BufferedReader(filr);
         String linje;
@@ -38,10 +38,11 @@ public class FilAdministering {
             Medlem m = new Medlem(per,aktivitetstype, konkurrence,bet);
             medlemmer.add(m);
         }
+        ind.close();
     }
 
     // Gemmer nye medlemmer i filen
-    public void saveMedlemsData(Medlem sm) throws IOException {
+    public void saveMedlemsFil(Medlem sm) throws IOException {
         //Tilføjer nye medlem til filen
         filw = new FileWriter("src//Medlemmer.txt", true);
         ud = new BufferedWriter(filw);
@@ -50,13 +51,46 @@ public class FilAdministering {
     }
 
     // håndtere redigering af medlemmer og opdatere txt fil med ændringer:
-    public void opdaterMedlemsData(ArrayList<Medlem> list)throws IOException{
+    public void opdaterMedlemsFil(ArrayList<Medlem> list)throws IOException{
         filw = new FileWriter("src//Medlemmer.txt");
         ud = new BufferedWriter(filw);
         for(Medlem m:list){
             ud.write(m.saveMedlem()+"\n");
         }
         ud.close();
+    }
+// Gemmer ny medlemmers Kontingent samt tilføjer dem til betalingslisten
+    public void saveKonFil(KontingentInfo k)throws IOException{
+        filw = new FileWriter("src//KontingentInfo.txt", true);
+        ud = new BufferedWriter(filw);
+        ud.write(k.saveKontingent());
+        ud.close();
+    }
+    // håndtere redigering af Betalinger/Restance og opdatere txt fil med ændringer:
+    public void opdaterKonFil(ArrayList<KontingentInfo> list)throws IOException{
+        filw = new FileWriter("src//KontingentInfo.txt");
+        ud = new BufferedWriter(filw);
+        for(KontingentInfo k:list){
+            ud.write(k.saveKontingent()+"\n");
+        }
+        ud.close();
+    }
+    //henter txt fil med kontingent info på medlemmer og opretter Arraylist med infoen
+    public void hentKonFil(ArrayList<KontingentInfo> kon)throws IOException {
+        filr = new FileReader("src//KontingentInfo.txt");
+        ind = new BufferedReader(filr);
+        String linje;
+        while ((linje = ind.readLine()) != null) {
+            String[] medlem = linje.split(",");
+            int regiNr=Integer.parseInt(medlem[0]);
+            int kontoNr=Integer.parseInt(medlem[1]);
+            double kontingent=Double.parseDouble(medlem[2]);
+            boolean harBetalt= Boolean.parseBoolean(medlem[3]);
+            //Medlemmers kontingent bliver tilføjet ArrayList
+            KontingentInfo k=new KontingentInfo(regiNr,kontoNr,kontingent,harBetalt);
+            kon.add(k);
+        }
+        ind.close();
     }
 
 

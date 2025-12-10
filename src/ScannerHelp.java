@@ -1,9 +1,7 @@
 import java.util.*;
-import java.io.*;
+
 public class ScannerHelp {
-    //class med 2 metoder der retunere "Enter" som nuller i scannner
-    // Hjælper med at man kan skippe indtastninger hvis der ikke skal lave ændringer
-    static Scanner sc=new Scanner(System.in);
+    // Hjælpe metoder til at kunne skippe indtastninger hvis der ikke skal laves ændringer i console
     public static String skipString(Scanner sc){
         String input=sc.nextLine();
         return input.isEmpty() ? null:input;
@@ -15,9 +13,32 @@ public class ScannerHelp {
             return null;
         }else return Integer.parseInt(input);
     }
+    //Hjælpe metode til forkert input i console for Integers
+    public static Integer checkInputInt(Scanner sc){
+        while(true){
+            if(sc.hasNextInt()){
+                return sc.nextInt();
+            }else{System.out.println("Ugyldigt input!\n" +
+                    "Prøv igen:");
+                sc.nextLine();
+            }
+        }
+    }
+    //Hjælpe metode til forkert input  for aktivitetstype af medlemmer
+    public static String checkInputType(Scanner sc) {
+        while (true) {
+            String input=sc.next().trim();
+            if (input.equalsIgnoreCase("passivt") || input.equalsIgnoreCase("aktivt")) {
+                return input;
+            } else {
+                System.out.println("Ugyldigt input!\n" +
+                        "Format skal være:(Aktivt eller Passivt) Prøv igen:");
+                sc.nextLine();
+            }
+        }
+    }
 
-    public static void main(String[]arg)throws IOException{
-        String input=sc.nextLine();
-        if(input.isEmpty()) input=null;
+// til test
+    public static void main(String[]arg){
     }
 }

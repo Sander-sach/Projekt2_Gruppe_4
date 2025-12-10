@@ -33,13 +33,20 @@ public class Medlem {
         return personinfo.getAlderPer();
     }
 
-    String getAktivitetstype() {
+    public String getAktivitetstype() {
         return aktivitetstype;
     }
 
-    String getKonkurrence() {
+    public String getKonkurrence() {
         return (konkurrence ? "Konkurrence" : "Motionist");
     }
+    public int getRegiNr(){
+        return betalingsinfo.getRegiNrBet();
+    }
+    public int getKontoNr(){
+        return betalingsinfo.getKontoNrBet();
+    }
+
 
     // setter til ændringer af medlemsoplysninger
     public void setNavn(String navn) {
@@ -77,22 +84,19 @@ public class Medlem {
     //toString metode til udprintning af medlemmer
     public String toString() {
         return personinfo.getPersonInfo() +
-                "," + aktivitetstype +
-                "," + (konkurrence == null ? "#" : (konkurrence ? "Konkurrence" : "Montionist")) +
-                "," + betalingsinfo.getBetalingsInfo();
+                "\nAktivitetstype:\t" + aktivitetstype +
+                "\nMedlemstype:\t" + (konkurrence == null ? "N/A" : (konkurrence ? "Konkurrence" : "Montionist")) +
+                "\n--Betalingsoplysninger--\n" + betalingsinfo.getBetalingsInfo();
     }
 
     // ToString metode til at gemme medlemmers Booleans som True eller False i .txt dokumenter
     public String saveMedlem() {
-        return personinfo.getPersonInfo() +
+        return personinfo.savePersonInfo() +
                 "," + aktivitetstype +
                 "," + (konkurrence != null ? String.valueOf(konkurrence) : "#") +
-                "," + betalingsinfo.getBetalingsInfo();
+                "," + betalingsinfo.saveBetalingsInfo();
     }
 
-    public String verificerMedlem() {
-        return getTelefon() + getEmail();
-    }
     // main til test
     public static void main(String[] args) {
 
