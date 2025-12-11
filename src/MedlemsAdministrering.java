@@ -8,6 +8,9 @@ public class MedlemsAdministrering {
     void hentMedlemsListe() throws IOException {
         fil.hentMedlemsFil(medlemmer);
     }
+    ArrayList<Medlem> ExportMedlemsListe() throws IOException {
+        return medlemmer;
+    }
 
     void registrerMedlem(Medlem m) throws IOException {
         medlemmer.add(m);

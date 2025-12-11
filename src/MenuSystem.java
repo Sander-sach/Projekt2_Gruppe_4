@@ -1,3 +1,4 @@
+import javax.xml.transform.Result;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -16,16 +17,20 @@ public class MenuSystem {
     static final String KODE_KASSERER = "Kassere1";
 
     // til trænerdelen
-    static TrainingResult trainingResult = new TrainingResult();
-    static ArrayList<TrainingResult.KonkurrenceSvømmer> konkurrenceSvømmere = new ArrayList<>();
-
+    KonkurrenceAdministrering ka=new KonkurrenceAdministrering();
+    TrainingResult Result = new TrainingResult();
+     ArrayList<KonkurrenceSvømmer> konkurrenceSvømmere = new ArrayList<>();
     // til kasserer-delen (kontingenter)
-    static KontingentAdministrering kontAdmin = new KontingentAdministrering();
+     KontingentAdministrering kontAdmin = new KontingentAdministrering();
+    // til Medlemmer
+    ArrayList<Medlem> medlemmer = new ArrayList<>();
+    MedlemsAdministrering admin = new MedlemsAdministrering();
+
 
     // ====================
     // LOGIN
     // ====================
-    static boolean erGyldigKode(String kode) {
+     boolean erGyldigKode(String kode) {
         if (kode.length() < 8) return false;
         boolean harStor = false, harLille = false, harTal = false;
         for (int i = 0; i < kode.length(); i++) {
@@ -37,7 +42,7 @@ public class MenuSystem {
         return harStor && harLille && harTal;
     }
 
-    static Rolle fåRolleFraKode(String kode) {
+     Rolle fåRolleFraKode(String kode) {
         if (!erGyldigKode(kode)) return null;
         if (kode.equals(KODE_TRAENER))  return Rolle.TRAENER;
         if (kode.equals(KODE_FORMAND))  return Rolle.FORMAND;
@@ -45,7 +50,7 @@ public class MenuSystem {
         return null;
     }
 
-    static Rolle loginMenu(Scanner input) {
+     Rolle loginMenu(Scanner input) {
         System.out.println("--- LOGIN ---");
         System.out.print("Indtast rolle-kode: ");
         String kode = input.nextLine();
@@ -62,50 +67,26 @@ public class MenuSystem {
     // ====================
     // TRÆNER-MENU (simpel)
     // ====================
-    static void traenerMenu(Scanner input, Rolle rolle) {
-
-        if (!(rolle == Rolle.TRAENER || rolle == Rolle.FORMAND)) {
-            System.out.println("Kun TRÆNER eller FORMAND har adgang til træner-menuen.");
-            return;
-        }
-
-        boolean kør = true;
+     boolean traenerMenu(Scanner input)throws IOException {
+         admin.hentMedlemsListe();
+         boolean kør = true;
         while (kør) {
             System.out.println("\n--- TRÆNER MENU ---");
-            System.out.println("1. Opret konkurrencesvømmer");
-            System.out.println("2. Tilføj træningsresultat");
-            System.out.println("3. Vis svømmere + bedste træningstider");
-            System.out.println("4. Tilbage");
+            System.out.println("1. Vis Konkurrence Hold");
+            System.out.println("2. Tilføj svømmeresultat");
+            System.out.println("3. Vis svømmere + bedste svømmeresultater");
+            System.out.println("4. Afslut");
             System.out.print("Vælg: ");
+
 
             int valg = input.nextInt();
             input.nextLine();
 
             switch (valg) {
-                case 1: { // opret konkurrencesvømmer
-                    System.out.print("Navn: ");
-                    String navn = input.nextLine();
 
-                    System.out.print("Telefon: ");
-                    int telefon = input.nextInt();
-                    input.nextLine();
+                case 1: ka.hentKonkurrenceMedlemmer(admin.ExportMedlemsListe());
+                    ka.sorterKonkurrenceHold();
 
-                    System.out.print("Email: ");
-                    String email = input.nextLine();
-
-                    System.out.print("Adresse: ");
-                    String adresse = input.nextLine();
-
-                    String aktivitetstype = "aktivt";
-                    Boolean konkurrence = true;
-
-                    Medlem medlem = new Medlem(navn, telefon, email, adresse, aktivitetstype, konkurrence);
-                    TrainingResult.KonkurrenceSvømmer ks = trainingResult.new KonkurrenceSvømmer(medlem);
-                    konkurrenceSvømmere.add(ks);
-
-                    System.out.println("Konkurrencesvømmer oprettet.");
-                    break;
-                }
 
                 case 2: { // tilføj træningsresultat
                     if (konkurrenceSvømmere.isEmpty()) {
@@ -127,7 +108,7 @@ public class MenuSystem {
                         break;
                     }
 
-                    TrainingResult.KonkurrenceSvømmer ks = konkurrenceSvømmere.get(sValg - 1);
+                    KonkurrenceSvømmer ks = konkurrenceSvømmere.get(sValg - 1);
 
                     // vælg disciplin
                     System.out.println("Vælg disciplin:");
@@ -152,10 +133,11 @@ public class MenuSystem {
                     String datoStr = input.nextLine();
                     LocalDate dato = LocalDate.parse(datoStr);
 
-                    TrainingResult.Result r = trainingResult.new Result(d, tid, dato);
+                    TrainingResult tr = new TrainingResult();
+                    TrainingResult.Result r = tr.new Result(d, tid, dato);
                     ks.addTrainingResult(r);
 
-                    System.out.println("Træningsresultat tilføjet.");
+                    System.out.println("Svømmeresultat tilføjet.");
                     break;
                 }
 
@@ -166,7 +148,7 @@ public class MenuSystem {
                     }
 
                     System.out.println("--- Oversigt ---");
-                    for (TrainingResult.KonkurrenceSvømmer ks : konkurrenceSvømmere) {
+                    for (KonkurrenceSvømmer ks : konkurrenceSvømmere) {
                         Medlem m = ks.getMedlem();
                         System.out.println("Svømmer: " + m.getNavn() + " (tlf: " + m.getTelefon() + ")");
                         for (TrainingResult.Discipline d : TrainingResult.Discipline.values()) {
@@ -181,24 +163,19 @@ public class MenuSystem {
                 }
 
                 case 4:
-                    kør = false;
+                     kør = false;
                     break;
 
                 default:
                     System.out.println("Ugyldigt valg.");
             }
-        }
+        } return false;
     }
 
     // ====================
     // KASSERER-MENU (kontingent)
     // ====================
-    static void kassererMenu(Scanner input, Rolle rolle) {
-
-        if (!(rolle == Rolle.KASSERER || rolle == Rolle.FORMAND)) {
-            System.out.println("Kun KASSERER eller FORMAND har adgang til kasserer-menuen.");
-            return;
-        }
+     boolean kassererMenu(Scanner input) {
 
         // Hent kontingenter automatisk én gang, når man går ind i menuen
         try {
@@ -206,7 +183,7 @@ public class MenuSystem {
             System.out.println("Kontingentliste hentet fra fil.");
         } catch (IOException e) {
             System.out.println("Fejl ved indlæsning af kontingentfil: " + e.getMessage());
-            return; // kan ikke lave kasserer-menu uden data
+            return false;// kan ikke lave kasserer-menu uden data
         }
 
         boolean kør = true;
@@ -215,7 +192,7 @@ public class MenuSystem {
             System.out.println("\n--- KASSERER MENU ---");
             System.out.println("1. Vis alle kontingenter");
             System.out.println("2. Rediger betaling for medlem");
-            System.out.println("3. Tilbage");
+            System.out.println("3. Afslut");
             System.out.print("Vælg: ");
 
             int valg = input.nextInt();
@@ -263,37 +240,22 @@ public class MenuSystem {
                 default:
                     System.out.println("Ugyldigt valg.");
             }
-        }
+        }return false;
     }
-
-    // ====================
-    // HOVEDMENU (medlemmer)
-    // ====================
-    public static void main(String[] args) {
-
-        Scanner input = new Scanner(System.in);
-        MedlemsAdministrering admin = new MedlemsAdministrering();
-
+    boolean formandMenu(Scanner input) {
         try {
             admin.hentMedlemsListe();
         } catch (IOException e) {
             System.out.println("Kunne ikke hente medlemsdata: " + e.getMessage());
         }
-
-        Rolle rolle = loginMenu(input);
-        if (rolle == null) return;
-
         boolean kør = true;
 
         while (kør) {
-            System.out.println("\n--- HOVEDMENU ---");
+            System.out.println("\n--- FORMANDS MENU ---");
             System.out.println("1. Registrer medlem");
-            System.out.println("2. Søg medlem (telefon)");
-            System.out.println("3. Slet medlem (telefon) [kun FORMAND]");
-            System.out.println("4. Rediger medlem");
-            System.out.println("5. Træner-menu (konkurrencesvømmere)");
-            System.out.println("6. Kasserer-menu (kontingenter)");
-            System.out.println("7. Afslut");
+            System.out.println("2. Søg og rediger medlem (telefon)");
+            System.out.println("3. Slet medlem (telefon)");
+            System.out.println("4. Afslut");
             System.out.print("Vælg: ");
 
             int valg = input.nextInt();
@@ -306,52 +268,69 @@ public class MenuSystem {
                         System.out.print("Navn: ");
                         String navn = input.nextLine();
 
-                        System.out.print("Telefon: ");
-                        int telefon = input.nextInt();
+                        System.out.print("Alder: ");
+                        int alder = ScannerHelp.checkInputInt(input);
+                        input.nextLine();
+
+                        System.out.print("Telefon nummer: ");
+                        int telefon = ScannerHelp.checkInputInt(input);
                         input.nextLine();
 
                         System.out.print("Email: ");
                         String email = input.nextLine();
 
+
                         System.out.print("Adresse: ");
                         String adresse = input.nextLine();
 
-                        System.out.print("Aktivitetstype (Aktivt/Passivt): ");
-                        String aktivitetstype = input.nextLine();
 
-                        Boolean konkurrence = null;
-                        if (aktivitetstype.equalsIgnoreCase("aktivt")) {
-                            System.out.print("Konkurrencemedlem? (true/false): ");
-                            konkurrence = input.nextBoolean();
+                        System.out.print("Passivt eller Aktivt?: ");
+                        String aktivtype = ScannerHelp.checkInputType(input);
+                        input.nextLine();
+                        Boolean konk = null;
+
+                        if (aktivtype.equalsIgnoreCase("aktivt")) {
+                            System.out.print("Er konkurrence (true/false): ");
+                            konk = input.nextBoolean();
                             input.nextLine();
                         }
 
-                        Medlem nyt = new Medlem(navn, telefon, email, adresse, aktivitetstype, konkurrence);
-                        boolean tjek = admin.tjekNyMedlemsData(nyt);
-                        if (tjek != false) {
-                            admin.registrerMedlem(nyt);
-                            System.out.println("Medlem registreret!");
-                        }
+                        System.out.print("\n\t---Betalings Oplysninger---\n\n" +
+                                "Registreringsnummer:");
+                        int regiNr = ScannerHelp.checkInputInt(input);
+                        input.nextLine();
+
+                        System.out.print("Kontonummer: ");
+                        int kontoNr = ScannerHelp.checkInputInt(input);
+                        input.nextLine();
+
+                        PersonInfo p = new PersonInfo(navn, alder, telefon, email, adresse);
+                        BetalingsInfo b = new BetalingsInfo(regiNr, kontoNr);
+                        Medlem m = new Medlem(p, aktivtype, konk, b);
+
+                        if (admin.tjekNyMedlemsData(m)) {
+                            admin.registrerMedlem(m);
+                            System.out.println("Medlem tilføjet!");
+                        } else System.out.println("Medlems telefonnummer er allerede registeret");
                         break;
 
                     case 2: // find
-                        System.out.print("Indtast telefonnummer: ");
-                        int søgTlf = input.nextInt();
-                        input.nextLine();
+                        System.out.print("Indtast Telefonnummer: ");
+                        int rediger;
+                        int søgMedlem = ScannerHelp.checkInputInt(input);
+                        Medlem fundet = admin.findMedlem(søgMedlem);
 
-                        Medlem fundet = admin.findMedlem(søgTlf);
                         if (fundet != null) {
                             System.out.println(fundet);
-                        } else {
-                            System.out.println("Ingen medlem med det telefonnummer.");
-                        }
+                            System.out.println("\nRediger medlemsoplysninger tast 1:\n" +
+                                    "Tilbage til Hovedmenu tast 2");
+                            rediger = ScannerHelp.checkInputInt(input);
+                            if (rediger == 1) admin.redigerMedlem(fundet, input);
+
+                        } else System.out.println("Ikke fundet.");
                         break;
 
                     case 3: // slet (kun formand)
-                        if (rolle != Rolle.FORMAND) {
-                            System.out.println("Kun FORMAND må slette medlemmer.");
-                            break;
-                        }
                         System.out.print("Telefonnummer på medlem der skal slettes: ");
                         int sletTlf = input.nextInt();
                         input.nextLine();
@@ -360,28 +339,7 @@ public class MenuSystem {
                         System.out.println("Sletning forsøgt (hvis medlemmet fandtes, er det nu slettet).");
                         break;
 
-                    case 4: // rediger
-                        System.out.print("Telefonnummer på medlem der skal redigeres: ");
-                        int redigTlf = input.nextInt();
-                        input.nextLine();
-
-                        Medlem redigMedlem = admin.findMedlem(redigTlf);
-                        if (redigMedlem != null) {
-                            admin.redigerMedlem(redigMedlem, input);
-                        } else {
-                            System.out.println("Ingen medlem med det telefonnummer.");
-                        }
-                        break;
-
-                    case 5: // TRÆNER-MENU
-                        traenerMenu(input, rolle);
-                        break;
-
-                    case 6: // KASSERER-MENU
-                        kassererMenu(input, rolle);
-                        break;
-
-                    case 7:
+                    case 4:
                         kør = false;
                         System.out.println("Programmet afsluttes.");
                         break;
@@ -393,7 +351,16 @@ public class MenuSystem {
             } catch (IOException e) {
                 System.out.println("Fejl ved filhåndtering: " + e.getMessage());
             }
-        }
+        }return false;
+    }
+
+
+
+    // ====================
+    // HOVEDMENU (medlemmer)
+    // ====================
+    public static void main(String[] args)throws IOException {
+
     }
 }
 

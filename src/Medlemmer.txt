@@ -1,3 +1,6 @@
 kian,23,457834,kain@123.dk,bongovej 12,passivt,#,3456,345678
 balder,45,563423,balder@123.dk,billevej 34,aktivt,false,4556,567889
 morten,34,903456,morten@123.dk,tupevej 23,aktivt,true,5678,23905
+peter,13,456789,morten@123.dk,tupevej 23,aktivt,true,5678,23905
+morten,16,567890,morten@123.dk,tupevej 23,aktivt,true,5678,23905
+casper,56,566778,balder@123.dk,billevej 34,aktivt,true,4556,567889
